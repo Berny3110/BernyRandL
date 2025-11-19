@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Jeu de tirage aléatoire</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: black; /* fond noir derrière la carte */
+    }
+    #result {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 75vh; /* lettre énorme */
+      color: white;
+      text-transform: uppercase;
+      border-radius: 30px; /* coins arrondis */
+      margin: 20px; /* espace pour voir le fond noir autour */
+      box-shadow: 0 0 20px rgba(0,0,0,0.8); /* effet carte posée */
+    }
+    #lancer {
+      width: 100%;
+      padding: 20px;
+      font-size: 2em;
+      border: none;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="result"></div>
+  <button id="lancer">Lancer</button>
+
+  <script>
+    function tirage() {
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const lettre = alphabet[Math.floor(Math.random() * alphabet.length)];
+
+      // Couleurs adoucies (rouge et bleu pastel)
+      const couleurs = ["#b44d4d", "#4d6eb4"];
+      const couleur = couleurs[Math.floor(Math.random() * couleurs.length)];
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.textContent = lettre;
+      resultDiv.style.backgroundColor = couleur;
+    }
+
+    tirage();
+    document.getElementById("lancer").addEventListener("click", tirage);
+  </script>
+</body>
+</html>
