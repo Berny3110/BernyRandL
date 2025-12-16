@@ -29,22 +29,42 @@
       text-transform: uppercase;
       border-radius: 30px;
       margin: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      transition: background-color 0.4s ease;
     }
     #lancer {
       position: fixed;
-      bottom: 20px;
+      bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 60%;
-      padding: 20px;
-      font-size: 1.8em;
+      width: 85%;               /* Beaucoup plus large */
+      max-width: 500px;         /* Limite raisonnable sur grands écrans */
+      padding: 28px 20px;       /* Plus haut */
+      font-size: 2.2em;         /* Texte beaucoup plus gros */
+      font-weight: bold;
       border: none;
       cursor: pointer;
-      background-color: #333;
+      background: linear-gradient(145deg, #444, #222); /* Dégradé pour plus de profondeur */
       color: white;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.6);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7), 
+                  0 0 15px rgba(255,255,255,0.1) inset;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    #lancer:active {
+      transform: translateX(-50%) translateY(4px) scale(0.98);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+    }
+    /* Petit effet de pulsation au chargement */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+    }
+    #lancer {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
@@ -57,7 +77,7 @@
       const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const lettre = alphabet[Math.floor(Math.random() * alphabet.length)];
 
-      // Bleu parfait + rouge plus sombre
+      // Rouge sombre et bleu profond
       const couleurs = ["#b71c1c", "#1976d2"]; 
       const couleur = couleurs[Math.floor(Math.random() * couleurs.length)];
 
@@ -66,7 +86,10 @@
       resultDiv.style.backgroundColor = couleur;
     }
 
+    // Tirage au chargement de la page
     tirage();
+
+    // Clic sur le bouton
     document.getElementById("lancer").addEventListener("click", tirage);
   </script>
 </body>
