@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Jeu de Tirage - Score Final</title>
+  <title>Jeu de Tirage</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="manifest" href="manifest.json">
+  
+  <meta name="theme-color" content="#1976d2">
+  
+  <link rel="apple-touch-icon" href="icon-192.png">
+
   <style>
+	
     body {
       margin: 0;
       background-color: black;
@@ -240,5 +246,12 @@
     tirage();
     updateScore();
   </script>
+	<script>
+		if ('serviceWorker' in navigator) {
+			window.addEventListener('load', () => {
+				navigator.serviceWorker.register('sw.js').catch(err => console.log('Erreur SW:', err));
+			});
+		}
+	</script>
 </body>
 </html>
