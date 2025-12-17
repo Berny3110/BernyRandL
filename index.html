@@ -2,95 +2,243 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Jeu de tirage aléatoire</title>
-
-  <!-- Lien vers le manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Couleur de la barre d’adresse sur mobile -->
-  <meta name="theme-color" content="#1976d2">
-
+  <title>Jeu de Tirage - Score Final</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      height: 100vh;
       background-color: black;
-      display: flex;
-      flex-direction: column;
-    }
-    #result {
-      flex: 1;
+      font-family: sans-serif;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 75vmin;
-      color: white;
-      text-transform: uppercase;
-      border-radius: 30px;
-      margin: 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.8);
-      transition: background-color 0.4s ease;
+      overflow: hidden;
     }
+
+    #card {
+      width: 95vw;
+      height: 90vh;
+      background-color: #1976d2;
+      border-radius: 20px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    #lettre-display {
+      color: white;
+      font-size: 50vh;
+      font-weight: bold;
+      user-select: none;
+    }
+
     #lancer {
-      position: fixed;
+      position: absolute;
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 85%;               /* Beaucoup plus large */
-      max-width: 500px;         /* Limite raisonnable sur grands écrans */
-      padding: 28px 20px;       /* Plus haut */
-      font-size: 2.2em;         /* Texte beaucoup plus gros */
-      font-weight: bold;
+      background: white;
+      color: black;
       border: none;
+      padding: 12px 60px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.2rem;
       cursor: pointer;
-      background: linear-gradient(145deg, #444, #222); /* Dégradé pour plus de profondeur */
-      color: white;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.7), 
-                  0 0 15px rgba(255,255,255,0.1) inset;
-      transition: all 0.2s ease;
       text-transform: uppercase;
-      letter-spacing: 2px;
     }
-    #lancer:active {
-      transform: translateX(-50%) translateY(4px) scale(0.98);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+
+    /* Jauge à droite intégrée */
+    #gauge-container {
+      position: absolute;
+      right: 20px;
+      top: 40px;
+      bottom: 40px;
+      width: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
     }
-    /* Petit effet de pulsation au chargement */
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
-      70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); }
-      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+
+    .gauge-btn {
+      width: 35px;
+      height: 35px;
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      background: rgba(0,0,0,0.1);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
     }
-    #lancer {
-      animation: pulse 2s infinite;
+
+    #gauge-track {
+      flex: 1;
+      width: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      margin: 15px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #gauge-fill {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      border-radius: 10px;
+      transition: height 0.3s ease;
+    }
+
+    /* Écran de fin (Gagné / Perdu) */
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 20px;
+      display: none; /* Masqué par défaut */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      color: white;
+      text-align: center;
+    }
+
+    #overlay-icon {
+      font-size: 150px;
+      margin-bottom: 20px;
+    }
+
+    #overlay-text {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+    }
+
+    #recommencer {
+      background: #1976d2;
+      color: white;
+      border: 2px solid white;
+      padding: 15px 40px;
+      border-radius: 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
     }
   </style>
 </head>
 <body>
-  <div id="result"></div>
-  <button id="lancer">Lancer</button>
+
+  <div id="card">
+    <div id="lettre-display"></div>
+
+    <div id="gauge-container">
+      <button class="gauge-btn" id="plus">+</button>
+      <div id="gauge-track">
+        <div id="gauge-fill"></div>
+      </div>
+      <button class="gauge-btn" id="minus">-</button>
+    </div>
+
+    <button id="lancer">Lancer</button>
+
+    <div id="overlay">
+      <div id="overlay-icon"></div>
+      <div id="overlay-text"></div>
+      <button id="recommencer">Recommencer</button>
+    </div>
+  </div>
 
   <script>
-    function tirage() {
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const lettre = alphabet[Math.floor(Math.random() * alphabet.length)];
+    const lettres = ["E","A","I","S","N","R","T","O","L","U","D","M","C","P","V","G","B","F","H","J","Q","K","W","X","Y","Z"];
+    const freq = [14.7,7.6,7.5,7.9,7.2,6.5,6.9,5.8,5.5,6.3,3.6,2.9,3.3,3.0,1.8,1.2,1.1,1.1,0.7,0.6,0.6,0.05,0.05,0.4,0.3,0.1];
+    
+    let score = 5;
+    const maxScore = 10;
 
-      // Rouge sombre et bleu profond
+    function tirage() {
+      const totalFreq = freq.reduce((a,b) => a+b, 0);
+      const probaFreq = freq.map(f => f / totalFreq);
+      const probaUniforme = Array(lettres.length).fill(1 / lettres.length);
+      const alpha = 0.3;
+      const probaMix = probaFreq.map((p, i) => alpha * p + (1 - alpha) * probaUniforme[i]);
+
+      const total = probaMix.reduce((a,b) => a+b, 0);
+      let r = Math.random() * total;
+      let lettre;
+      for (let i = 0; i < lettres.length; i++) {
+        if (r < probaMix[i]) {
+          lettre = lettres[i];
+          break;
+        }
+        r -= probaMix[i];
+      }
+
       const couleurs = ["#b71c1c", "#1976d2"]; 
       const couleur = couleurs[Math.floor(Math.random() * couleurs.length)];
 
-      const resultDiv = document.getElementById("result");
-      resultDiv.textContent = lettre;
-      resultDiv.style.backgroundColor = couleur;
+      document.getElementById("lettre-display").textContent = lettre;
+      document.getElementById("card").style.backgroundColor = couleur;
     }
 
-    // Tirage au chargement de la page
-    tirage();
+    function updateScore() {
+      const percent = (score / maxScore) * 100;
+      document.getElementById("gauge-fill").style.height = percent + "%";
 
-    // Clic sur le bouton
-    document.getElementById("lancer").addEventListener("click", tirage);
+      // Vérification fin de partie
+      if (score === 10) {
+        showEndScreen("✅", "Gagné", "#2e7d32");
+      } else if (score === 0) {
+        showEndScreen("❌", "Perdu", "#c62828");
+      }
+    }
+
+    function showEndScreen(icon, text, color) {
+      const overlay = document.getElementById("overlay");
+      document.getElementById("overlay-icon").textContent = icon;
+      document.getElementById("overlay-text").textContent = text;
+      document.getElementById("recommencer").style.backgroundColor = color;
+      overlay.style.display = "flex";
+    }
+
+    function resetGame() {
+      score = 5;
+      document.getElementById("overlay").style.display = "none";
+      updateScore();
+      tirage();
+    }
+
+    document.getElementById("plus").onclick = (e) => {
+      e.stopPropagation();
+      if (score < maxScore) { score++; updateScore(); }
+    };
+
+    document.getElementById("minus").onclick = (e) => {
+      e.stopPropagation();
+      if (score > 0) { score--; updateScore(); }
+    };
+
+    document.getElementById("lancer").onclick = tirage;
+    document.getElementById("recommencer").onclick = resetGame;
+
+    // Initialisation
+    tirage();
+    updateScore();
   </script>
 </body>
 </html>
